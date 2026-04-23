@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MLH Front Desk Display</title>
+    <title>MSOE Dorm Front Desk Display</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -11,7 +11,7 @@
       <header class="top-bar">
         <div>
           <p class="eyebrow">Front Desk Display</p>
-          <h1 id="page-title">MLH</h1>
+          <h1 id="page-title">MSOE Dorm</h1>
         </div>
         <p class="status-pill" aria-label="Current display mode">Home</p>
       </header>
@@ -30,14 +30,14 @@
           </p>
         </div>
 
-        <nav class="radial-menu" aria-label="MLH display pages">
+        <nav class="radial-menu" aria-label="MSOE Dorm display pages">
           <svg
             class="wheel"
             viewBox="-230 -230 460 460"
             role="img"
             aria-labelledby="wheel-title wheel-description"
           >
-            <title id="wheel-title">MLH display navigation wheel</title>
+            <title id="wheel-title">MSOE Dorm display navigation wheel</title>
             <desc id="wheel-description">
               A circular menu with selectable slices for front desk display pages.
             </desc>
@@ -51,8 +51,11 @@
               data-description="Open the package tracker for residents picking up mail."
             >
               <g class="wheel-slice-group">
-                <path class="wheel-slice" d="M 0 0 L 0 -200 A 200 200 0 0 1 173.205 -100 Z" />
-                <text class="wheel-label" x="86" y="-112">Packages</text>
+                <path
+                  class="wheel-slice"
+                  d="M 0 0 L -141.421 -141.421 A 200 200 0 0 1 141.421 -141.421 Z"
+                />
+                <text class="wheel-label" x="0" y="-144">Packages</text>
               </g>
             </a>
 
@@ -60,25 +63,16 @@
               class="wheel-link"
               href="announcements.html"
               aria-label="Open announcements display"
+              data-window-name="mlh-announcements-display"
               data-title="Announcements"
-              data-description="Show current hall updates, reminders, and desk notices."
+              data-description="Show the looping announcements slides on the front desk display."
             >
               <g class="wheel-slice-group">
-                <path class="wheel-slice" d="M 0 0 L 173.205 -100 A 200 200 0 0 1 173.205 100 Z" />
-                <text class="wheel-label wheel-label-wide" x="134" y="5">Announcements</text>
-              </g>
-            </a>
-
-            <a
-              class="wheel-link"
-              href="weather.html"
-              aria-label="Open weather display"
-              data-title="Weather"
-              data-description="Display local conditions and the forecast for residents."
-            >
-              <g class="wheel-slice-group">
-                <path class="wheel-slice" d="M 0 0 L 173.205 100 A 200 200 0 0 1 0 200 Z" />
-                <text class="wheel-label" x="78" y="122">Weather</text>
+                <path
+                  class="wheel-slice"
+                  d="M 0 0 L 141.421 -141.421 A 200 200 0 0 1 141.421 141.421 Z"
+                />
+                <text class="wheel-label wheel-label-wide" x="136" y="5">Announcements</text>
               </g>
             </a>
 
@@ -86,25 +80,16 @@
               class="wheel-link"
               href="events.html"
               aria-label="Open events display"
+              data-window-name="mlh-events-display"
               data-title="Events"
-              data-description="Highlight upcoming programs, meetings, and hall activities."
+              data-description="Show the looping events slides on the front desk display."
             >
               <g class="wheel-slice-group">
-                <path class="wheel-slice" d="M 0 0 L 0 200 A 200 200 0 0 1 -173.205 100 Z" />
-                <text class="wheel-label" x="-78" y="122">Events</text>
-              </g>
-            </a>
-
-            <a
-              class="wheel-link"
-              href="resources.html"
-              aria-label="Open resources display"
-              data-title="Resources"
-              data-description="Share useful desk links, forms, and resident services."
-            >
-              <g class="wheel-slice-group">
-                <path class="wheel-slice" d="M 0 0 L -173.205 100 A 200 200 0 0 1 -173.205 -100 Z" />
-                <text class="wheel-label wheel-label-wide" x="-134" y="5">Resources</text>
+                <path
+                  class="wheel-slice"
+                  d="M 0 0 L 141.421 141.421 A 200 200 0 0 1 -141.421 141.421 Z"
+                />
+                <text class="wheel-label" x="0" y="150">Events</text>
               </g>
             </a>
 
@@ -116,19 +101,24 @@
               data-description="Adjust display behavior and future front desk controls."
             >
               <g class="wheel-slice-group">
-                <path class="wheel-slice" d="M 0 0 L -173.205 -100 A 200 200 0 0 1 0 -200 Z" />
-                <text class="wheel-label" x="-86" y="-112">Settings</text>
+                <path
+                  class="wheel-slice"
+                  d="M 0 0 L -141.421 141.421 A 200 200 0 0 1 -141.421 -141.421 Z"
+                />
+                <text class="wheel-label" x="-134" y="5">Settings</text>
               </g>
             </a>
 
             <circle class="wheel-center" r="60" />
-            <text class="wheel-center-title" x="0" y="-6">MLH</text>
-            <text class="wheel-center-subtitle" x="0" y="24">Display</text>
+            <text class="wheel-center-title" x="0" y="-6">MSOE</text>
+            <text class="wheel-center-subtitle" x="0" y="24">Dorm</text>
           </svg>
         </nav>
       </section>
     </main>
 
+    <script src="display-config.js"></script>
+    <script src="theme.js"></script>
     <script src="main.js"></script>
   </body>
 </html>

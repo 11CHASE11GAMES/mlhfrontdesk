@@ -3,12 +3,29 @@ const links = document.querySelectorAll(".wheel-link");
 const wheelCopy = document.querySelector(".wheel-copy");
 const selectedTitle = document.querySelector("#selected-title");
 const selectedDescription = document.querySelector("#selected-description");
-let packageWindow = null;
+const displayWindows = new Map();
 
 window.name = HOME_WINDOW_NAME;
 
 const defaultTitle = wheelCopy.dataset.defaultTitle;
 const defaultDescription = wheelCopy.dataset.defaultDescription;
+
+function getExistingDisplayWindow(windowName) {
+  const currentDisplayWindow = displayWindows.get(windowName);
+
+  if (currentDisplayWindow && !currentDisplayWindow.closed) {
+    return currentDisplayWindow;
+  }
+
+  const namedWindow = window.open("", windowName);
+
+  if (!namedWindow) {
+    return null;
+  }
+
+  displayWindows.set(windowName, namedWindow);
+  return namedWindow;
+}
 
 function setPreview(link) {
   selectedTitle.textContent = link.dataset.title;
@@ -39,15 +56,21 @@ links.forEach((link) => {
       typeof link.href === "object" && "baseVal" in link.href
         ? link.href.baseVal
         : link.getAttribute("href");
-    if (packageWindow && !packageWindow.closed) {
-      packageWindow.focus();
+    const currentDisplayWindow = getExistingDisplayWindow(windowName);
+
+    if (!currentDisplayWindow) {
       return;
     }
 
-    packageWindow = window.open(destination, windowName);
-
-    if (packageWindow) {
-      packageWindow.focus();
+    try {
+      if (currentDisplayWindow.location.href === "about:blank") {
+        currentDisplayWindow.location.replace(destination);
+      }
+    } catch {
+      currentDisplayWindow.focus();
+      return;
     }
+
+    currentDisplayWindow.focus();
   });
 });

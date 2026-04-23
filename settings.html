@@ -3,17 +3,199 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MLH Settings</title>
+    <title>MSOE Dorm Settings</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="placeholder-page">
-      <section class="placeholder-panel">
-        <p class="eyebrow">MLH Display</p>
-        <h1>Settings</h1>
-        <p>This page is reserved for future display controls and admin settings.</p>
-        <a class="back-link" href="index.html">Back to Home</a>
+    <div class="settings-theme-preview" aria-hidden="true">
+      <div class="settings-theme-art settings-theme-art-summer">
+        <div class="settings-summer-glow"></div>
+        <div class="settings-summer-sun"></div>
+        <div class="settings-summer-palm">
+          <span class="settings-summer-trunk"></span>
+          <div class="settings-summer-crown">
+            <span class="settings-summer-leaf settings-summer-leaf-a"></span>
+            <span class="settings-summer-leaf settings-summer-leaf-b"></span>
+            <span class="settings-summer-leaf settings-summer-leaf-c"></span>
+            <span class="settings-summer-leaf settings-summer-leaf-d"></span>
+          </div>
+        </div>
+        <div class="settings-summer-sand"></div>
+      </div>
+
+      <div class="settings-theme-art settings-theme-art-winter">
+        <div class="settings-winter-flake settings-winter-flake-a"></div>
+        <div class="settings-winter-flake settings-winter-flake-b"></div>
+        <div class="settings-winter-flake settings-winter-flake-c"></div>
+        <div class="settings-winter-flake settings-winter-flake-d"></div>
+        <div class="settings-winter-snowman">
+          <span class="settings-winter-body settings-winter-body-large"></span>
+          <span class="settings-winter-body settings-winter-body-small"></span>
+          <span class="settings-winter-eye settings-winter-eye-left"></span>
+          <span class="settings-winter-eye settings-winter-eye-right"></span>
+          <span class="settings-winter-nose"></span>
+          <span class="settings-winter-scarf"></span>
+        </div>
+        <div class="settings-winter-snow"></div>
+      </div>
+
+      <div class="settings-theme-art settings-theme-art-autumn">
+        <div class="settings-autumn-branch"></div>
+        <div class="settings-autumn-leaf settings-autumn-leaf-a"></div>
+        <div class="settings-autumn-leaf settings-autumn-leaf-b"></div>
+        <div class="settings-autumn-leaf settings-autumn-leaf-c"></div>
+        <div class="settings-autumn-pumpkin">
+          <span class="settings-autumn-pumpkin-seam settings-autumn-pumpkin-seam-a"></span>
+          <span class="settings-autumn-pumpkin-seam settings-autumn-pumpkin-seam-b"></span>
+          <span class="settings-autumn-stem"></span>
+        </div>
+        <div class="settings-autumn-ground"></div>
+      </div>
+
+      <div class="settings-theme-art settings-theme-art-spring">
+        <div class="settings-spring-cloud"></div>
+        <div class="settings-spring-butterfly settings-spring-butterfly-a"></div>
+        <div class="settings-spring-butterfly settings-spring-butterfly-b"></div>
+        <div class="settings-spring-flower settings-spring-flower-a"></div>
+        <div class="settings-spring-flower settings-spring-flower-b"></div>
+        <div class="settings-spring-flower settings-spring-flower-c"></div>
+        <div class="settings-spring-grass"></div>
+      </div>
+    </div>
+
+    <main class="settings-page">
+      <header class="settings-header">
+        <div class="settings-intro">
+          <p class="eyebrow">MSOE Dorm Display</p>
+          <h1>Settings</h1>
+          <p class="settings-copy">
+            Update the iframe destinations used by the Packages, Announcements,
+            and Events displays.
+          </p>
+        </div>
+
+        <a class="back-link" href="index.html">Back Home</a>
+      </header>
+
+      <section class="settings-tool" aria-label="Display link settings">
+        <form id="display-settings-form" class="settings-form" novalidate>
+          <div class="settings-group">
+            <label class="settings-label" for="packages-url">Packages URL</label>
+            <input
+              class="settings-input"
+              id="packages-url"
+              name="packages"
+              type="url"
+              inputmode="url"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <p class="settings-help">Used for the package tracker iframe.</p>
+          </div>
+
+          <div class="settings-group">
+            <label class="settings-label" for="announcements-url">Announcements URL</label>
+            <input
+              class="settings-input"
+              id="announcements-url"
+              name="announcements"
+              type="url"
+              inputmode="url"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <p class="settings-help">Used for the announcements slideshow iframe.</p>
+          </div>
+
+          <div class="settings-group">
+            <label class="settings-label" for="events-url">Events URL</label>
+            <input
+              class="settings-input"
+              id="events-url"
+              name="events"
+              type="url"
+              inputmode="url"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <p class="settings-help">Used for the events slideshow iframe.</p>
+          </div>
+
+          <fieldset class="settings-group settings-theme-group">
+            <legend class="settings-label">Theme Preview</legend>
+            <p class="settings-help">
+              Select a theme to preview it here, then save to apply it across the site.
+            </p>
+
+            <div class="theme-picker" role="radiogroup" aria-label="Settings theme preview">
+              <label class="theme-option theme-option-summer">
+                <input
+                  class="theme-radio"
+                  name="settings-theme-preview"
+                  type="radio"
+                  value="summer"
+                />
+                <span class="theme-option-title">Summer</span>
+                <span class="theme-option-copy">Warm sun, palm tree, and sand.</span>
+              </label>
+
+              <label class="theme-option theme-option-winter">
+                <input
+                  class="theme-radio"
+                  name="settings-theme-preview"
+                  type="radio"
+                  value="winter"
+                />
+                <span class="theme-option-title">Winter</span>
+                <span class="theme-option-copy">Snowfall, snowdrift, and snowman.</span>
+              </label>
+
+              <label class="theme-option theme-option-autumn">
+                <input
+                  class="theme-radio"
+                  name="settings-theme-preview"
+                  type="radio"
+                  value="autumn"
+                />
+                <span class="theme-option-title">Autumn</span>
+                <span class="theme-option-copy">Falling leaves, pumpkin, and warm ground.</span>
+              </label>
+
+              <label class="theme-option theme-option-spring">
+                <input
+                  class="theme-radio"
+                  name="settings-theme-preview"
+                  type="radio"
+                  value="spring"
+                />
+                <span class="theme-option-title">Spring</span>
+                <span class="theme-option-copy">Clouds, flowers, grass, and butterflies.</span>
+              </label>
+            </div>
+
+            <div class="settings-theme-actions">
+              <button class="settings-button" id="remove-theme-preview" type="button">
+                Remove Theme
+              </button>
+            </div>
+          </fieldset>
+
+          <div class="settings-actions">
+            <button class="settings-button settings-button-primary" type="submit">Save Settings</button>
+            <button class="settings-button" id="reset-defaults" type="button">
+              Reset Defaults
+            </button>
+          </div>
+
+          <p class="settings-note">
+            Saving updates the links and current theme across open tabs without reopening them.
+          </p>
+          <p id="settings-status" class="settings-status" role="status" aria-live="polite"></p>
+        </form>
       </section>
     </main>
+    <script src="display-config.js"></script>
+    <script src="theme.js"></script>
+    <script src="settings.js"></script>
   </body>
 </html>

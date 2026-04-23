@@ -3,17 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MLH Announcements</title>
+    <title>MSOE Dorm Announcements</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="placeholder-page">
-      <section class="placeholder-panel">
-        <p class="eyebrow">MLH Display</p>
-        <h1>Announcements</h1>
-        <p>This page is ready for hall announcements and front desk notices.</p>
-        <a class="back-link" href="index.html">Back to Home</a>
-      </section>
+    <main class="fullscreen-embed-page">
+      <a class="overlay-close" href="index.html" aria-label="Return to home screen">
+        <span aria-hidden="true">&times;</span>
+      </a>
+
+      <iframe
+        class="fullscreen-embed-frame"
+        data-display-key="announcements"
+        title="MSOE Dorm announcements"
+        loading="eager"
+        allowfullscreen
+      ></iframe>
     </main>
+    <script src="display-config.js"></script>
+    <script src="theme.js"></script>
+    <script src="display-frame.js"></script>
+    <script src="embed-tab.js"></script>
   </body>
 </html>
