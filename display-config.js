@@ -2,6 +2,7 @@ const DISPLAY_CONFIG_STORAGE_KEY = "mlh-display-config";
 const DISPLAY_CONFIG_CHANGE_EVENT = "msoe-display-config-change";
 const DISPLAY_CONFIG_CHANNEL_NAME = "msoe-display-config";
 const VALID_DISPLAY_THEMES = Object.freeze(["summer", "winter", "autumn", "spring"]);
+const VALID_DISPLAY_DORMS = Object.freeze(["MLH", "VT/MH", "GT"]);
 
 const DEFAULT_DISPLAY_CONFIG = Object.freeze({
   packages:
@@ -10,7 +11,15 @@ const DEFAULT_DISPLAY_CONFIG = Object.freeze({
     "https://docs.google.com/presentation/d/e/2PACX-1vQ6jwYwx2hBV6U0HCbGfam3IZKGcbs2J2VQmTK6nHi31DXp1L-fu1R8sf9CzvTgruwX0DuXyvSOdeRD/embed?start=true&loop=true&delayms=60000",
   events:
     "https://docs.google.com/presentation/d/e/2PACX-1vT1vdcpCdy2smHEGxhoRfPcPGf2Xm2Hx7PhiDlGM79UCg_cYt8jPWdFguyQk5qqzMFCwyWp0m5XgvUO/embed?start=true&loop=true&delayms=30000",
+  slideshowAnnouncementsSeconds: 60,
+  slideshowEventsSeconds: 30,
+  rotationPackagesSeconds: 60,
+  rotationAnnouncementsSeconds: 60,
+  rotationEventsSeconds: 60,
   theme: "",
+  autoTheme: false,
+  dorm: "",
+  showStatusWidget: true,
 });
 
 let displayConfigChannel = null;
@@ -28,6 +37,26 @@ if (typeof BroadcastChannel !== "undefined") {
 }
 
 function normalizeDisplayConfig(rawConfig = {}) {
+  const normalizeRotationSeconds = (value, fallback) => {
+    const parsedValue = Number.parseInt(value, 10);
+
+    if (!Number.isFinite(parsedValue)) {
+      return fallback;
+    }
+
+    return parsedValue;
+  };
+
+  const normalizeSlideshowSeconds = (value, fallback) => {
+    const parsedValue = Number.parseInt(value, 10);
+
+    if (!Number.isFinite(parsedValue)) {
+      return fallback;
+    }
+
+    return parsedValue;
+  };
+
   return {
     packages:
       typeof rawConfig.packages === "string" && rawConfig.packages.trim()
@@ -41,11 +70,44 @@ function normalizeDisplayConfig(rawConfig = {}) {
       typeof rawConfig.events === "string" && rawConfig.events.trim()
         ? rawConfig.events.trim()
         : DEFAULT_DISPLAY_CONFIG.events,
+    slideshowAnnouncementsSeconds: normalizeSlideshowSeconds(
+      rawConfig.slideshowAnnouncementsSeconds,
+      DEFAULT_DISPLAY_CONFIG.slideshowAnnouncementsSeconds,
+    ),
+    slideshowEventsSeconds: normalizeSlideshowSeconds(
+      rawConfig.slideshowEventsSeconds,
+      DEFAULT_DISPLAY_CONFIG.slideshowEventsSeconds,
+    ),
+    rotationPackagesSeconds: normalizeRotationSeconds(
+      rawConfig.rotationPackagesSeconds,
+      DEFAULT_DISPLAY_CONFIG.rotationPackagesSeconds,
+    ),
+    rotationAnnouncementsSeconds: normalizeRotationSeconds(
+      rawConfig.rotationAnnouncementsSeconds,
+      DEFAULT_DISPLAY_CONFIG.rotationAnnouncementsSeconds,
+    ),
+    rotationEventsSeconds: normalizeRotationSeconds(
+      rawConfig.rotationEventsSeconds,
+      DEFAULT_DISPLAY_CONFIG.rotationEventsSeconds,
+    ),
     theme:
       typeof rawConfig.theme === "string" &&
       VALID_DISPLAY_THEMES.includes(rawConfig.theme.trim().toLowerCase())
         ? rawConfig.theme.trim().toLowerCase()
         : DEFAULT_DISPLAY_CONFIG.theme,
+    autoTheme:
+      typeof rawConfig.autoTheme === "boolean"
+        ? rawConfig.autoTheme
+        : DEFAULT_DISPLAY_CONFIG.autoTheme,
+    dorm:
+      typeof rawConfig.dorm === "string" &&
+      VALID_DISPLAY_DORMS.includes(rawConfig.dorm.trim().toUpperCase())
+        ? rawConfig.dorm.trim().toUpperCase()
+        : DEFAULT_DISPLAY_CONFIG.dorm,
+    showStatusWidget:
+      typeof rawConfig.showStatusWidget === "boolean"
+        ? rawConfig.showStatusWidget
+        : DEFAULT_DISPLAY_CONFIG.showStatusWidget,
   };
 }
 
@@ -89,11 +151,41 @@ function resetDisplayConfig() {
   return defaultConfig;
 }
 
+function getDisplayUrl(displayKey, config = loadDisplayConfig()) {
+  const baseUrl = config?.[displayKey];
+
+  if (typeof baseUrl !== "string" || !baseUrl) {
+    return "";
+  }
+
+  if (displayKey !== "announcements" && displayKey !== "events") {
+    return baseUrl;
+  }
+
+  try {
+    const nextUrl = new URL(baseUrl);
+    const slideshowSeconds =
+      displayKey === "announcements"
+        ? config.slideshowAnnouncementsSeconds
+        : config.slideshowEventsSeconds;
+
+    nextUrl.searchParams.set("start", "true");
+    nextUrl.searchParams.set("loop", "true");
+    nextUrl.searchParams.set("delayms", String(slideshowSeconds * 1000));
+
+    return nextUrl.toString();
+  } catch {
+    return baseUrl;
+  }
+}
+
 window.MLHDisplayConfig = {
   changeEvent: DISPLAY_CONFIG_CHANGE_EVENT,
   storageKey: DISPLAY_CONFIG_STORAGE_KEY,
   defaultConfig: DEFAULT_DISPLAY_CONFIG,
   validThemes: VALID_DISPLAY_THEMES,
+  validDorms: VALID_DISPLAY_DORMS,
+  getDisplayUrl,
   loadDisplayConfig,
   saveDisplayConfig,
   resetDisplayConfig,

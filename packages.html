@@ -6,7 +6,7 @@
     <title>MSOE Dorm Packages</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body data-page-title-suffix="Packages" data-rotation-page="packages">
     <main class="fullscreen-embed-page">
       <a class="overlay-close" href="index.html" aria-label="Return to home screen">
         <span aria-hidden="true">&times;</span>
@@ -15,13 +15,17 @@
       <iframe
         class="fullscreen-embed-frame"
         data-display-key="packages"
+        data-frame-title-suffix="package tracker"
         title="MSOE Dorm package tracker"
         loading="eager"
         allow="geolocation; microphone; camera; fullscreen; clipboard-read; clipboard-write"
       ></iframe>
     </main>
     <script src="display-config.js"></script>
+    <script src="rotation.js"></script>
+    <script src="branding.js"></script>
     <script src="theme.js"></script>
+    <script src="status-widget.js"></script>
     <script src="display-frame.js"></script>
     <script src="embed-tab.js"></script>
   </body>

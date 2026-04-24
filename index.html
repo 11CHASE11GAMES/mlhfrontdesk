@@ -6,12 +6,12 @@
     <title>MSOE Dorm Front Desk Display</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body data-page-title-suffix="Front Desk Display" data-rotation-page="home">
     <main class="display-shell" aria-labelledby="page-title">
       <header class="top-bar">
         <div>
           <p class="eyebrow">Front Desk Display</p>
-          <h1 id="page-title">MSOE Dorm</h1>
+          <h1 id="page-title" data-dorm-name>MSOE Dorm</h1>
         </div>
         <p class="status-pill" aria-label="Current display mode">Home</p>
       </header>
@@ -21,16 +21,16 @@
           class="wheel-copy"
           aria-live="polite"
           data-default-title="Choose a Page"
-          data-default-description="Hover a slice to preview each front desk screen."
+          data-default-description="Hover over a slice to see what it does."
         >
           <p class="eyebrow">Select Display</p>
           <h2 id="selected-title">Choose a Page</h2>
           <p id="selected-description">
-            Hover a slice to preview each front desk screen.
+            Hover over a slice to see what it does.
           </p>
         </div>
 
-        <nav class="radial-menu" aria-label="MSOE Dorm display pages">
+        <nav class="radial-menu" data-dorm-nav-label aria-label="MSOE Dorm display pages">
           <svg
             class="wheel"
             viewBox="-230 -230 460 460"
@@ -44,11 +44,11 @@
 
             <a
               class="wheel-link"
-              href="packages.html"
+              href="display.html"
               aria-label="Open packages display"
-              data-window-name="mlh-packages-display"
+              data-display-key="packages"
               data-title="Packages"
-              data-description="Open the package tracker for residents picking up mail."
+              data-description="Open the package tracker."
             >
               <g class="wheel-slice-group">
                 <path
@@ -61,11 +61,11 @@
 
             <a
               class="wheel-link"
-              href="announcements.html"
+              href="display.html"
               aria-label="Open announcements display"
-              data-window-name="mlh-announcements-display"
+              data-display-key="announcements"
               data-title="Announcements"
-              data-description="Show the looping announcements slides on the front desk display."
+              data-description="Show the looping announcements slides."
             >
               <g class="wheel-slice-group">
                 <path
@@ -78,11 +78,11 @@
 
             <a
               class="wheel-link"
-              href="events.html"
+              href="display.html"
               aria-label="Open events display"
-              data-window-name="mlh-events-display"
+              data-display-key="events"
               data-title="Events"
-              data-description="Show the looping events slides on the front desk display."
+              data-description="Show the looping events slides."
             >
               <g class="wheel-slice-group">
                 <path
@@ -97,8 +97,9 @@
               class="wheel-link"
               href="settings.html"
               aria-label="Open display settings"
+              data-display-key="settings"
               data-title="Settings"
-              data-description="Adjust display behavior and future front desk controls."
+              data-description="Adjust display behavior and other front desk controls."
             >
               <g class="wheel-slice-group">
                 <path
@@ -110,15 +111,39 @@
             </a>
 
             <circle class="wheel-center" r="60" />
-            <text class="wheel-center-title" x="0" y="-6">MSOE</text>
-            <text class="wheel-center-subtitle" x="0" y="24">Dorm</text>
           </svg>
+
+          <div class="wheel-center-control">
+            <p class="wheel-center-control-label">Auto-Rotate</p>
+
+            <button
+              id="auto-rotation-button"
+              class="wheel-center-button"
+              type="button"
+            >
+              Start Rotation
+            </button>
+
+            <p
+              id="auto-rotation-status"
+              class="wheel-center-control-status"
+              role="status"
+              aria-live="polite"
+            >
+              Off
+            </p>
+          </div>
         </nav>
       </section>
+
+      <footer class="page-footer">&copy; 2026 Chase McNulty. All Rights Reserved.</footer>
     </main>
 
     <script src="display-config.js"></script>
+    <script src="rotation.js"></script>
+    <script src="branding.js"></script>
     <script src="theme.js"></script>
+    <script src="status-widget.js"></script>
     <script src="main.js"></script>
   </body>
 </html>

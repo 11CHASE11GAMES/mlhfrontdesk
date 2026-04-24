@@ -6,22 +6,28 @@
     <title>MSOE Dorm Events</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body data-page-title-suffix="Events" data-rotation-page="events">
     <main class="fullscreen-embed-page">
       <a class="overlay-close" href="index.html" aria-label="Return to home screen">
         <span aria-hidden="true">&times;</span>
       </a>
 
-      <iframe
-        class="fullscreen-embed-frame"
-        data-display-key="events"
-        title="MSOE Dorm events"
-        loading="eager"
-        allowfullscreen
-      ></iframe>
+      <div class="fullscreen-embed-viewport fullscreen-embed-viewport-slides">
+        <iframe
+          class="fullscreen-embed-frame fullscreen-embed-frame-slides"
+          data-display-key="events"
+          data-frame-title-suffix="events"
+          title="MSOE Dorm events"
+          loading="eager"
+          allowfullscreen
+        ></iframe>
+      </div>
     </main>
     <script src="display-config.js"></script>
+    <script src="rotation.js"></script>
+    <script src="branding.js"></script>
     <script src="theme.js"></script>
+    <script src="status-widget.js"></script>
     <script src="display-frame.js"></script>
     <script src="embed-tab.js"></script>
   </body>

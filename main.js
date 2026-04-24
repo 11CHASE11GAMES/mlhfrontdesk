@@ -1,30 +1,19 @@
 const HOME_WINDOW_NAME = "mlh-frontdesk-home";
-const links = document.querySelectorAll(".wheel-link");
+const links = Array.from(document.querySelectorAll(".wheel-link"));
 const wheelCopy = document.querySelector(".wheel-copy");
 const selectedTitle = document.querySelector("#selected-title");
 const selectedDescription = document.querySelector("#selected-description");
-const displayWindows = new Map();
+const statusPill = document.querySelector(".status-pill");
+const autoRotationButton = document.querySelector("#auto-rotation-button");
+const autoRotationStatus = document.querySelector("#auto-rotation-status");
 
 window.name = HOME_WINDOW_NAME;
 
 const defaultTitle = wheelCopy.dataset.defaultTitle;
 const defaultDescription = wheelCopy.dataset.defaultDescription;
 
-function getExistingDisplayWindow(windowName) {
-  const currentDisplayWindow = displayWindows.get(windowName);
-
-  if (currentDisplayWindow && !currentDisplayWindow.closed) {
-    return currentDisplayWindow;
-  }
-
-  const namedWindow = window.open("", windowName);
-
-  if (!namedWindow) {
-    return null;
-  }
-
-  displayWindows.set(windowName, namedWindow);
-  return namedWindow;
+function getRotationLink(displayKey) {
+  return links.find((link) => link.dataset.displayKey === displayKey) ?? null;
 }
 
 function setPreview(link) {
@@ -37,40 +26,89 @@ function resetPreview() {
   selectedDescription.textContent = defaultDescription;
 }
 
+function getActiveRotationLink() {
+  const rotationState = window.MLHRotation.loadRotationState();
+
+  if (!rotationState.active) {
+    return null;
+  }
+
+  return getRotationLink(rotationState.currentKey);
+}
+
+function restorePreviewAfterHover() {
+  const activeRotationLink = getActiveRotationLink();
+
+  if (activeRotationLink) {
+    setPreview(activeRotationLink);
+    return;
+  }
+
+  resetPreview();
+}
+
+function updateRotationUi() {
+  const rotationState = window.MLHRotation.loadRotationState();
+  const activeRotationLink = rotationState.active
+    ? getRotationLink(rotationState.currentKey)
+    : null;
+
+  if (autoRotationButton) {
+    autoRotationButton.textContent = "Start Rotation";
+    autoRotationButton.dataset.state = rotationState.active ? "running" : "idle";
+    autoRotationButton.disabled = rotationState.active;
+  }
+
+  if (autoRotationStatus) {
+    autoRotationStatus.textContent = activeRotationLink
+      ? activeRotationLink.dataset.title
+      : "Off";
+    autoRotationStatus.dataset.state = rotationState.active ? "running" : "idle";
+  }
+
+  if (statusPill) {
+    statusPill.textContent = rotationState.active ? "Auto-Rotating" : "Home";
+  }
+}
+
 links.forEach((link) => {
   link.addEventListener("mouseenter", () => setPreview(link));
   link.addEventListener("focus", () => setPreview(link));
-  link.addEventListener("mouseleave", resetPreview);
-  link.addEventListener("blur", resetPreview);
+  link.addEventListener("mouseleave", restorePreviewAfterHover);
+  link.addEventListener("blur", restorePreviewAfterHover);
 
   link.addEventListener("click", (event) => {
-    const windowName = link.dataset.windowName;
+    const displayKey = link.dataset.displayKey;
 
-    if (!windowName) {
+    if (!window.MLHRotation.displayKeys.includes(displayKey)) {
       return;
     }
 
     event.preventDefault();
+    setPreview(link);
+    window.MLHRotation.stopRotation();
 
-    const destination =
-      typeof link.href === "object" && "baseVal" in link.href
-        ? link.href.baseVal
-        : link.getAttribute("href");
-    const currentDisplayWindow = getExistingDisplayWindow(windowName);
-
-    if (!currentDisplayWindow) {
+    if (!window.MLHRotation.openDisplayByKey(displayKey)) {
       return;
     }
-
-    try {
-      if (currentDisplayWindow.location.href === "about:blank") {
-        currentDisplayWindow.location.replace(destination);
-      }
-    } catch {
-      currentDisplayWindow.focus();
-      return;
-    }
-
-    currentDisplayWindow.focus();
   });
+});
+
+autoRotationButton?.addEventListener("click", () => {
+  if (!window.MLHRotation.startRotation()) {
+    autoRotationStatus.textContent = "Blocked";
+    autoRotationStatus.dataset.state = "idle";
+    return;
+  }
+
+  restorePreviewAfterHover();
+  updateRotationUi();
+});
+
+updateRotationUi();
+restorePreviewAfterHover();
+
+window.addEventListener(window.MLHRotation.changeEvent, () => {
+  updateRotationUi();
+  restorePreviewAfterHover();
 });

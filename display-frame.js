@@ -7,7 +7,7 @@ function applyDisplayFrameConfig() {
 
   const displayKey = displayFrame.dataset.displayKey;
   const displayConfig = window.MLHDisplayConfig.loadDisplayConfig();
-  const nextUrl = displayConfig[displayKey];
+  const nextUrl = window.MLHDisplayConfig.getDisplayUrl(displayKey, displayConfig);
 
   if (!nextUrl || displayFrame.src === nextUrl) {
     return;

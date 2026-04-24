@@ -1,4 +1,5 @@
 const THEME_OVERLAY_SELECTOR = ".settings-theme-preview";
+const THEME_TIMEZONE = "America/Chicago";
 const THEME_OVERLAY_MARKUP = `
   <div class="settings-theme-preview" aria-hidden="true">
     <div class="settings-theme-art settings-theme-art-summer">
@@ -47,8 +48,6 @@ const THEME_OVERLAY_MARKUP = `
 
     <div class="settings-theme-art settings-theme-art-spring">
       <div class="settings-spring-cloud"></div>
-      <div class="settings-spring-butterfly settings-spring-butterfly-a"></div>
-      <div class="settings-spring-butterfly settings-spring-butterfly-b"></div>
       <div class="settings-spring-flower settings-spring-flower-a"></div>
       <div class="settings-spring-flower settings-spring-flower-b"></div>
       <div class="settings-spring-flower settings-spring-flower-c"></div>
@@ -56,6 +55,19 @@ const THEME_OVERLAY_MARKUP = `
     </div>
   </div>
 `;
+
+const themeDateFormatter = new Intl.DateTimeFormat("en-US", {
+  timeZone: THEME_TIMEZONE,
+  year: "numeric",
+  month: "numeric",
+  day: "numeric",
+  hour: "numeric",
+  minute: "numeric",
+  second: "numeric",
+  hourCycle: "h23",
+});
+
+let autoThemeTimer = null;
 
 function ensureThemeOverlay() {
   if (document.querySelector(THEME_OVERLAY_SELECTOR)) {
@@ -73,9 +85,83 @@ function applyDisplayTheme(theme) {
   }
 }
 
+function getThemeDateParts(date = new Date()) {
+  const parts = themeDateFormatter.formatToParts(date);
+
+  return {
+    year: Number(parts.find((part) => part.type === "year")?.value ?? 0),
+    month: Number(parts.find((part) => part.type === "month")?.value ?? 0),
+    day: Number(parts.find((part) => part.type === "day")?.value ?? 0),
+    hour: Number(parts.find((part) => part.type === "hour")?.value ?? 0),
+    minute: Number(parts.find((part) => part.type === "minute")?.value ?? 0),
+    second: Number(parts.find((part) => part.type === "second")?.value ?? 0),
+  };
+}
+
+function getTimeZoneOffsetMs(date = new Date()) {
+  const parts = getThemeDateParts(date);
+
+  return (
+    Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second) -
+    date.getTime()
+  );
+}
+
+function getNextThemeMidnightTimestamp(date = new Date()) {
+  const parts = getThemeDateParts(date);
+  const nextMidnightUtcGuess = Date.UTC(parts.year, parts.month - 1, parts.day + 1, 0, 0, 0);
+  const offsetMs = getTimeZoneOffsetMs(new Date(nextMidnightUtcGuess));
+
+  return nextMidnightUtcGuess - offsetMs;
+}
+
+function getAutoThemeForDate(date = new Date()) {
+  const { month } = getThemeDateParts(date);
+
+  if (month >= 3 && month <= 5) {
+    return "spring";
+  }
+
+  if (month >= 6 && month <= 8) {
+    return "summer";
+  }
+
+  if (month >= 9 && month <= 11) {
+    return "autumn";
+  }
+
+  return "winter";
+}
+
+function resolveDisplayTheme(config = window.MLHDisplayConfig.loadDisplayConfig()) {
+  if (config.autoTheme) {
+    return getAutoThemeForDate();
+  }
+
+  return config.theme;
+}
+
+function scheduleAutoThemeCheck(config = window.MLHDisplayConfig.loadDisplayConfig()) {
+  if (autoThemeTimer) {
+    window.clearTimeout(autoThemeTimer);
+    autoThemeTimer = null;
+  }
+
+  if (!config.autoTheme) {
+    return;
+  }
+
+  const nextCheckDelay = Math.max(getNextThemeMidnightTimestamp() - Date.now() + 1000, 1000);
+
+  autoThemeTimer = window.setTimeout(() => {
+    applySavedTheme(window.MLHDisplayConfig.loadDisplayConfig());
+  }, nextCheckDelay);
+}
+
 function applySavedTheme(config = window.MLHDisplayConfig.loadDisplayConfig()) {
   ensureThemeOverlay();
-  applyDisplayTheme(config.theme);
+  applyDisplayTheme(resolveDisplayTheme(config));
+  scheduleAutoThemeCheck(config);
 }
 
 applySavedTheme();
@@ -96,4 +182,6 @@ window.MLHTheme = {
   applyDisplayTheme,
   applySavedTheme,
   ensureThemeOverlay,
+  getAutoThemeForDate,
+  resolveDisplayTheme,
 };

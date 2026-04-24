@@ -4,6 +4,7 @@ const closeLink = document.querySelector(".overlay-close");
 if (closeLink) {
   closeLink.addEventListener("click", (event) => {
     event.preventDefault();
+    window.MLHRotation?.stopRotation();
 
     const homeWindow = window.open("", HOME_WINDOW_NAME);
 

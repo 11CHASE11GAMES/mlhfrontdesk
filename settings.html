@@ -6,7 +6,7 @@
     <title>MSOE Dorm Settings</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body data-page-title-suffix="Settings">
     <div class="settings-theme-preview" aria-hidden="true">
       <div class="settings-theme-art settings-theme-art-summer">
         <div class="settings-summer-glow"></div>
@@ -54,8 +54,6 @@
 
       <div class="settings-theme-art settings-theme-art-spring">
         <div class="settings-spring-cloud"></div>
-        <div class="settings-spring-butterfly settings-spring-butterfly-a"></div>
-        <div class="settings-spring-butterfly settings-spring-butterfly-b"></div>
         <div class="settings-spring-flower settings-spring-flower-a"></div>
         <div class="settings-spring-flower settings-spring-flower-b"></div>
         <div class="settings-spring-flower settings-spring-flower-c"></div>
@@ -66,12 +64,8 @@
     <main class="settings-page">
       <header class="settings-header">
         <div class="settings-intro">
-          <p class="eyebrow">MSOE Dorm Display</p>
+          <p class="eyebrow" data-dorm-display>MSOE Dorm Display</p>
           <h1>Settings</h1>
-          <p class="settings-copy">
-            Update the iframe destinations used by the Packages, Announcements,
-            and Events displays.
-          </p>
         </div>
 
         <a class="back-link" href="index.html">Back Home</a>
@@ -79,50 +73,151 @@
 
       <section class="settings-tool" aria-label="Display link settings">
         <form id="display-settings-form" class="settings-form" novalidate>
-          <div class="settings-group">
-            <label class="settings-label" for="packages-url">Packages URL</label>
-            <input
-              class="settings-input"
-              id="packages-url"
-              name="packages"
-              type="url"
-              inputmode="url"
-              autocomplete="off"
-              spellcheck="false"
-            />
-            <p class="settings-help">Used for the package tracker iframe.</p>
-          </div>
+          <fieldset class="settings-group settings-rotation-group">
+            <legend class="settings-label">Google Slides Loop Timing</legend>
+            <p class="settings-help">
+              Set how long each Google Slides presentation waits before advancing to the next
+              slide.
+            </p>
 
-          <div class="settings-group">
-            <label class="settings-label" for="announcements-url">Announcements URL</label>
-            <input
-              class="settings-input"
-              id="announcements-url"
-              name="announcements"
-              type="url"
-              inputmode="url"
-              autocomplete="off"
-              spellcheck="false"
-            />
-            <p class="settings-help">Used for the announcements slideshow iframe.</p>
-          </div>
+            <div class="settings-duration-grid">
+              <div class="settings-group">
+                <label
+                  class="settings-label settings-label-neutral"
+                  for="slideshow-announcements-seconds"
+                >
+                  Announcements Slide Delay
+                </label>
+                <div class="settings-duration-input">
+                  <input
+                    class="settings-input"
+                    id="slideshow-announcements-seconds"
+                    name="slideshowAnnouncementsSeconds"
+                    type="number"
+                    step="1"
+                    inputmode="numeric"
+                  />
+                  <span class="settings-duration-unit">sec</span>
+                </div>
+              </div>
 
-          <div class="settings-group">
-            <label class="settings-label" for="events-url">Events URL</label>
-            <input
-              class="settings-input"
-              id="events-url"
-              name="events"
-              type="url"
-              inputmode="url"
-              autocomplete="off"
-              spellcheck="false"
-            />
-            <p class="settings-help">Used for the events slideshow iframe.</p>
-          </div>
+              <div class="settings-group">
+                <label
+                  class="settings-label settings-label-neutral"
+                  for="slideshow-events-seconds"
+                >
+                  Events Slide Delay
+                </label>
+                <div class="settings-duration-input">
+                  <input
+                    class="settings-input"
+                    id="slideshow-events-seconds"
+                    name="slideshowEventsSeconds"
+                    type="number"
+                    step="1"
+                    inputmode="numeric"
+                  />
+                  <span class="settings-duration-unit">sec</span>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="settings-group settings-rotation-group">
+            <legend class="settings-label">Auto-Rotation Timing</legend>
+            <p class="settings-help">
+              Set how long each display stays on screen before auto-rotation moves to the next one.
+            </p>
+
+            <div class="settings-duration-grid">
+              <div class="settings-group">
+                <label
+                  class="settings-label settings-label-neutral"
+                  for="rotation-packages-seconds"
+                >
+                  Packages Duration
+                </label>
+                <div class="settings-duration-input">
+                  <input
+                    class="settings-input"
+                    id="rotation-packages-seconds"
+                    name="rotationPackagesSeconds"
+                    type="number"
+                    step="5"
+                    inputmode="numeric"
+                  />
+                  <span class="settings-duration-unit">sec</span>
+                </div>
+              </div>
+
+              <div class="settings-group">
+                <label
+                  class="settings-label settings-label-neutral"
+                  for="rotation-announcements-seconds"
+                >
+                  Announcements Duration
+                </label>
+                <div class="settings-duration-input">
+                  <input
+                    class="settings-input"
+                    id="rotation-announcements-seconds"
+                    name="rotationAnnouncementsSeconds"
+                    type="number"
+                    step="5"
+                    inputmode="numeric"
+                  />
+                  <span class="settings-duration-unit">sec</span>
+                </div>
+              </div>
+
+              <div class="settings-group">
+                <label
+                  class="settings-label settings-label-neutral"
+                  for="rotation-events-seconds"
+                >
+                  Events Duration
+                </label>
+                <div class="settings-duration-input">
+                  <input
+                    class="settings-input"
+                    id="rotation-events-seconds"
+                    name="rotationEventsSeconds"
+                    type="number"
+                    step="5"
+                    inputmode="numeric"
+                  />
+                  <span class="settings-duration-unit">sec</span>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="settings-group settings-section-group">
+            <legend class="settings-label">Time &amp; Weather</legend>
+            <div class="settings-toggle-row">
+              <div class="settings-toggle-copy">
+                <p class="settings-help">
+                  Show the current time and weather in the bottom right.
+                </p>
+              </div>
+
+              <label class="settings-toggle" for="show-status-widget">
+                <input
+                  class="settings-toggle-input"
+                  id="show-status-widget"
+                  name="showStatusWidget"
+                  type="checkbox"
+                  aria-label="Bottom Right Time and Weather"
+                />
+                <span class="settings-toggle-track">
+                  <span class="settings-toggle-thumb"></span>
+                </span>
+              </label>
+            </div>
+          </fieldset>
 
           <fieldset class="settings-group settings-theme-group">
-            <legend class="settings-label">Theme Preview</legend>
+            <legend class="settings-label">Theme</legend>
             <p class="settings-help">
               Select a theme to preview it here, then save to apply it across the site.
             </p>
@@ -169,7 +264,30 @@
                   value="spring"
                 />
                 <span class="theme-option-title">Spring</span>
-                <span class="theme-option-copy">Clouds, flowers, grass, and butterflies.</span>
+                <span class="theme-option-copy">Clouds, flowers, and grass.</span>
+              </label>
+            </div>
+
+            <div class="settings-toggle-row settings-theme-toggle-row">
+              <div class="settings-toggle-copy">
+                <label class="settings-label settings-label-neutral" for="auto-theme">
+                  Auto-Theme
+                </label>
+                <p class="settings-help">
+                  Match the current season automatically.
+                </p>
+              </div>
+
+              <label class="settings-toggle" for="auto-theme">
+                <input
+                  class="settings-toggle-input"
+                  id="auto-theme"
+                  name="autoTheme"
+                  type="checkbox"
+                />
+                <span class="settings-toggle-track">
+                  <span class="settings-toggle-thumb"></span>
+                </span>
               </label>
             </div>
 
@@ -180,6 +298,79 @@
             </div>
           </fieldset>
 
+          <fieldset class="settings-group settings-section-group">
+            <legend class="settings-label">Dorm</legend>
+            <select class="settings-input" id="dorm-select" name="dorm">
+              <option value="">MSOE Dorm (Default)</option>
+              <option value="MLH">MLH</option>
+              <option value="VT/MH">VT/MH</option>
+              <option value="GT">GT</option>
+            </select>
+            <p class="settings-help">
+              Choose which dorm name appears.
+            </p>
+          </fieldset>
+
+          <fieldset class="settings-group settings-section-group">
+            <legend class="settings-label">URLs</legend>
+
+            <div class="settings-group">
+              <label class="settings-label settings-label-neutral" for="packages-url">
+                Packages URL
+              </label>
+              <input
+                class="settings-input"
+                id="packages-url"
+                name="packages"
+                type="url"
+                inputmode="url"
+                autocomplete="off"
+                spellcheck="false"
+              />
+              <p class="settings-help">
+                Open the package tracker in Power Apps and copy the Power Apps link for this field.
+              </p>
+            </div>
+
+            <div class="settings-group">
+              <label class="settings-label settings-label-neutral" for="announcements-url">
+                Announcements URL
+              </label>
+              <input
+                class="settings-input"
+                id="announcements-url"
+                name="announcements"
+                type="url"
+                inputmode="url"
+                autocomplete="off"
+                spellcheck="false"
+              />
+              <p class="settings-help">
+                In the announcements Google Slides file, go to File -> Share -> Publish to web and
+                copy the published link.
+              </p>
+            </div>
+
+            <div class="settings-group">
+              <label class="settings-label settings-label-neutral" for="events-url">
+                Events URL
+              </label>
+              <input
+                class="settings-input"
+                id="events-url"
+                name="events"
+                type="url"
+                inputmode="url"
+                autocomplete="off"
+                spellcheck="false"
+              />
+              <p class="settings-help">
+                In the events Google Slides file, go to File -> Share -> Publish to web and copy
+                the published link.
+              </p>
+            </div>
+          </fieldset>
+
           <div class="settings-actions">
             <button class="settings-button settings-button-primary" type="submit">Save Settings</button>
             <button class="settings-button" id="reset-defaults" type="button">
@@ -187,15 +378,35 @@
             </button>
           </div>
 
-          <p class="settings-note">
-            Saving updates the links and current theme across open tabs without reopening them.
-          </p>
+          
           <p id="settings-status" class="settings-status" role="status" aria-live="polite"></p>
         </form>
       </section>
+
+      <footer class="page-footer">&copy; 2026 Chase McNulty. All Rights Reserved.</footer>
     </main>
+
+    <div
+      id="settings-reminder-toast"
+      class="settings-reminder-toast"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+      aria-hidden="true"
+    >
+      <span class="settings-reminder-toast-copy">Don&apos;t forget to save your settings.</span>
+      <button
+        class="settings-button settings-button-primary settings-reminder-toast-button"
+        id="settings-reminder-save"
+        type="button"
+      >
+        Save
+      </button>
+    </div>
     <script src="display-config.js"></script>
+    <script src="branding.js"></script>
     <script src="theme.js"></script>
+    <script src="status-widget.js"></script>
     <script src="settings.js"></script>
   </body>
 </html>

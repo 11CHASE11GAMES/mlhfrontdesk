@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MSOE Dorm Display</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="display-window-body" data-page-title-suffix="Display">
+    <main class="fullscreen-embed-page rotation-display-page">
+      <a class="overlay-close" href="index.html" aria-label="Return to home screen">
+        <span aria-hidden="true">&times;</span>
+      </a>
+
+      <div class="rotation-display-stage">
+        <section class="rotation-display-panel" data-rotation-panel-key="packages">
+          <iframe
+            class="rotation-display-frame"
+            data-rotation-frame-key="packages"
+            data-frame-title-suffix="package tracker"
+            title="MSOE Dorm package tracker"
+            loading="eager"
+            allow="geolocation; microphone; camera; fullscreen; clipboard-read; clipboard-write"
+          ></iframe>
+        </section>
+
+        <section
+          class="rotation-display-panel rotation-display-panel-slides"
+          data-rotation-panel-key="announcements"
+        >
+          <iframe
+            class="rotation-display-frame rotation-display-frame-slides"
+            data-rotation-frame-key="announcements"
+            data-frame-title-suffix="announcements"
+            title="MSOE Dorm announcements"
+            loading="eager"
+            allowfullscreen
+          ></iframe>
+        </section>
+
+        <section
+          class="rotation-display-panel rotation-display-panel-slides"
+          data-rotation-panel-key="events"
+        >
+          <iframe
+            class="rotation-display-frame rotation-display-frame-slides"
+            data-rotation-frame-key="events"
+            data-frame-title-suffix="events"
+            title="MSOE Dorm events"
+            loading="eager"
+            allowfullscreen
+          ></iframe>
+        </section>
+      </div>
+    </main>
+    <script src="display-config.js"></script>
+    <script src="rotation.js"></script>
+    <script src="branding.js"></script>
+    <script src="theme.js"></script>
+    <script src="status-widget.js"></script>
+    <script src="display-window.js"></script>
+    <script src="embed-tab.js"></script>
+  </body>
+</html>
