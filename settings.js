@@ -470,7 +470,7 @@ settingsForm.addEventListener("submit", (event) => {
   window.MLHStatusWidget?.applySavedStatusWidget(savedConfig);
   hideSettingsReminder();
   setSettingsStatus(
-    "Saved. Open tabs will update to the dorm name, status panel, links, slideshow timing, rotation timing, and theme settings.",
+    "Saved.",
     "success",
   );
 });
