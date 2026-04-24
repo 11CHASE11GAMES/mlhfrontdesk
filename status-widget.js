@@ -160,6 +160,19 @@ function renderWeatherStatus(weather) {
     : "Milwaukee forecast unavailable";
 }
 
+function applyStatusWidgetScale(config = window.MLHDisplayConfig.loadDisplayConfig()) {
+  ensureStatusWidget();
+
+  if (!statusWidgetRoot) {
+    return;
+  }
+
+  const scalePercent = Number(config.statusWidgetScalePercent);
+  const normalizedScale = Number.isFinite(scalePercent) ? scalePercent / 100 : 1;
+
+  statusWidgetRoot.style.setProperty("--status-widget-scale", String(normalizedScale));
+}
+
 function getCachedWeather() {
   try {
     const rawValue = localStorage.getItem(STATUS_WIDGET_CACHE_KEY);
@@ -269,6 +282,7 @@ function applyStatusWidgetVisibility(config = window.MLHDisplayConfig.loadDispla
     return;
   }
 
+  applyStatusWidgetScale(config);
   statusWidgetRoot.hidden = !config.showStatusWidget;
 
   if (config.showStatusWidget) {

@@ -13,6 +13,7 @@ const THEME_PREVIEW_NAME = "settings-theme-preview";
 const AUTO_THEME_FIELD_NAME = "autoTheme";
 const DORM_FIELD_NAME = "dorm";
 const STATUS_WIDGET_FIELD_NAME = "showStatusWidget";
+const STATUS_WIDGET_SCALE_FIELD_NAME = "statusWidgetScalePercent";
 
 window.name = HOME_WINDOW_NAME;
 
@@ -22,6 +23,7 @@ const removeThemePreviewButton = document.querySelector("#remove-theme-preview")
 const settingsStatus = document.querySelector("#settings-status");
 const settingsReminderToast = document.querySelector("#settings-reminder-toast");
 const settingsReminderSaveButton = document.querySelector("#settings-reminder-save");
+const statusWidgetScaleValue = document.querySelector("#status-widget-scale-value");
 const themePicker = document.querySelector(".theme-picker");
 const themePreviewInputs = Array.from(
   document.querySelectorAll(`[name="${THEME_PREVIEW_NAME}"]`),
@@ -36,6 +38,7 @@ function populateSettingsForm(config) {
   const autoThemeField = getSettingsField(AUTO_THEME_FIELD_NAME);
   const dormField = getSettingsField(DORM_FIELD_NAME);
   const statusWidgetField = getSettingsField(STATUS_WIDGET_FIELD_NAME);
+  const statusWidgetScaleField = getSettingsField(STATUS_WIDGET_SCALE_FIELD_NAME);
 
   if (autoThemeField) {
     autoThemeField.checked = config.autoTheme;
@@ -51,6 +54,13 @@ function populateSettingsForm(config) {
     statusWidgetField.checked = config.showStatusWidget;
     statusWidgetField.removeAttribute("aria-invalid");
   }
+
+  if (statusWidgetScaleField) {
+    statusWidgetScaleField.value = String(config.statusWidgetScalePercent);
+    statusWidgetScaleField.removeAttribute("aria-invalid");
+  }
+
+  syncStatusWidgetScaleValue(config.statusWidgetScalePercent);
 
   DISPLAY_KEYS.forEach((key) => {
     const field = getSettingsField(key);
@@ -119,10 +129,33 @@ function hideSettingsReminder() {
   settingsReminderToast.setAttribute("aria-hidden", "true");
 }
 
+function getStatusWidgetScalePercent() {
+  const parsedValue = Number.parseInt(
+    getSettingsField(STATUS_WIDGET_SCALE_FIELD_NAME)?.value ?? "",
+    10,
+  );
+
+  if (!Number.isFinite(parsedValue)) {
+    return window.MLHDisplayConfig.defaultConfig.statusWidgetScalePercent;
+  }
+
+  return Math.min(Math.max(parsedValue, 50), 400);
+}
+
+function syncStatusWidgetScaleValue(scalePercent = getStatusWidgetScalePercent()) {
+  if (!statusWidgetScaleValue) {
+    return;
+  }
+
+  statusWidgetScaleValue.value = `${scalePercent}%`;
+  statusWidgetScaleValue.textContent = `${scalePercent}%`;
+}
+
 function clearSettingsErrors() {
   const autoThemeField = getSettingsField(AUTO_THEME_FIELD_NAME);
   const dormField = getSettingsField(DORM_FIELD_NAME);
   const statusWidgetField = getSettingsField(STATUS_WIDGET_FIELD_NAME);
+  const statusWidgetScaleField = getSettingsField(STATUS_WIDGET_SCALE_FIELD_NAME);
 
   if (autoThemeField) {
     autoThemeField.removeAttribute("aria-invalid");
@@ -134,6 +167,10 @@ function clearSettingsErrors() {
 
   if (statusWidgetField) {
     statusWidgetField.removeAttribute("aria-invalid");
+  }
+
+  if (statusWidgetScaleField) {
+    statusWidgetScaleField.removeAttribute("aria-invalid");
   }
 
   DISPLAY_KEYS.forEach((key) => {
@@ -209,6 +246,7 @@ function getDraftConfig() {
     autoTheme: isAutoThemeEnabled(),
     dorm: getSettingsField(DORM_FIELD_NAME)?.value.trim() ?? "",
     showStatusWidget: Boolean(getSettingsField(STATUS_WIDGET_FIELD_NAME)?.checked),
+    statusWidgetScalePercent: getStatusWidgetScalePercent(),
     theme: getSelectedTheme(),
   };
 
@@ -236,6 +274,8 @@ function configsMatch(leftConfig, rightConfig) {
     Boolean(leftConfig.autoTheme) !== Boolean(rightConfig.autoTheme) ||
     (leftConfig.dorm ?? "") !== (rightConfig.dorm ?? "") ||
     Boolean(leftConfig.showStatusWidget) !== Boolean(rightConfig.showStatusWidget) ||
+    Number(leftConfig.statusWidgetScalePercent ?? 0) !==
+      Number(rightConfig.statusWidgetScalePercent ?? 0) ||
     (leftConfig.theme ?? "") !== (rightConfig.theme ?? "")
   ) {
     return false;
@@ -267,10 +307,21 @@ function syncSettingsReminder() {
   showSettingsReminder();
 }
 
+function applyStatusWidgetPreview() {
+  const currentConfig = window.MLHDisplayConfig.loadDisplayConfig();
+
+  window.MLHStatusWidget?.applySavedStatusWidget({
+    ...currentConfig,
+    showStatusWidget: Boolean(getSettingsField(STATUS_WIDGET_FIELD_NAME)?.checked),
+    statusWidgetScalePercent: getStatusWidgetScalePercent(),
+  });
+}
+
 function validateSettingsForm() {
   const nextConfig = {};
   const dormField = getSettingsField(DORM_FIELD_NAME);
   const dormValue = dormField?.value.trim() ?? "";
+  const statusWidgetScaleField = getSettingsField(STATUS_WIDGET_SCALE_FIELD_NAME);
 
   if (dormValue && !window.MLHDisplayConfig.validDorms.includes(dormValue)) {
     dormField?.setAttribute("aria-invalid", "true");
@@ -284,6 +335,20 @@ function validateSettingsForm() {
   nextConfig.autoTheme = isAutoThemeEnabled();
   nextConfig.dorm = dormValue;
   nextConfig.showStatusWidget = Boolean(getSettingsField(STATUS_WIDGET_FIELD_NAME)?.checked);
+
+  const statusWidgetScalePercent = Number.parseInt(statusWidgetScaleField?.value ?? "", 10);
+
+  if (!Number.isFinite(statusWidgetScalePercent)) {
+    statusWidgetScaleField?.setAttribute("aria-invalid", "true");
+    statusWidgetScaleField?.focus();
+    return {
+      valid: false,
+      message: "Status widget size must be a number.",
+    };
+  }
+
+  nextConfig.statusWidgetScalePercent = statusWidgetScalePercent;
+  statusWidgetScaleField?.removeAttribute("aria-invalid");
 
   for (const key of DISPLAY_KEYS) {
     const field = getSettingsField(key);
@@ -330,6 +395,15 @@ function validateSettingsForm() {
       };
     }
 
+    if (parsedValue < 0) {
+      field?.setAttribute("aria-invalid", "true");
+      field?.focus();
+      return {
+        valid: false,
+        message: `${fieldLabel} rotation must be 0 or greater.`,
+      };
+    }
+
     nextConfig[fieldName] = parsedValue;
     field?.removeAttribute("aria-invalid");
   }
@@ -347,11 +421,29 @@ function validateSettingsForm() {
       };
     }
 
+    if (parsedValue < 0) {
+      field?.setAttribute("aria-invalid", "true");
+      field?.focus();
+      return {
+        valid: false,
+        message: `${fieldLabel} slide delay must be 0 or greater.`,
+      };
+    }
+
     nextConfig[fieldName] = parsedValue;
     field?.removeAttribute("aria-invalid");
   }
 
   nextConfig.theme = getSelectedTheme();
+
+  if (statusWidgetScalePercent < 50 || statusWidgetScalePercent > 400) {
+    statusWidgetScaleField?.setAttribute("aria-invalid", "true");
+    statusWidgetScaleField?.focus();
+    return {
+      valid: false,
+      message: "Status widget size must be between 50% and 400%.",
+    };
+  }
 
   return {
     valid: true,
@@ -421,12 +513,19 @@ getSettingsField(DORM_FIELD_NAME)?.addEventListener("change", (event) => {
 });
 
 getSettingsField(STATUS_WIDGET_FIELD_NAME)?.addEventListener("change", (event) => {
-  const currentConfig = window.MLHDisplayConfig.loadDisplayConfig();
+  applyStatusWidgetPreview();
+  syncSettingsReminder();
+});
 
-  window.MLHStatusWidget?.applySavedStatusWidget({
-    ...currentConfig,
-    showStatusWidget: Boolean(event.target.checked),
-  });
+getSettingsField(STATUS_WIDGET_SCALE_FIELD_NAME)?.addEventListener("input", () => {
+  syncStatusWidgetScaleValue();
+  applyStatusWidgetPreview();
+  syncSettingsReminder();
+});
+
+getSettingsField(STATUS_WIDGET_SCALE_FIELD_NAME)?.addEventListener("change", () => {
+  syncStatusWidgetScaleValue();
+  applyStatusWidgetPreview();
   syncSettingsReminder();
 });
 

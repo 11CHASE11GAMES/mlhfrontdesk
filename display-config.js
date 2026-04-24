@@ -20,6 +20,7 @@ const DEFAULT_DISPLAY_CONFIG = Object.freeze({
   autoTheme: false,
   dorm: "",
   showStatusWidget: true,
+  statusWidgetScalePercent: 100,
 });
 
 let displayConfigChannel = null;
@@ -44,7 +45,7 @@ function normalizeDisplayConfig(rawConfig = {}) {
       return fallback;
     }
 
-    return parsedValue;
+    return Math.max(parsedValue, 0);
   };
 
   const normalizeSlideshowSeconds = (value, fallback) => {
@@ -54,7 +55,17 @@ function normalizeDisplayConfig(rawConfig = {}) {
       return fallback;
     }
 
-    return parsedValue;
+    return Math.max(parsedValue, 0);
+  };
+
+  const normalizeStatusWidgetScalePercent = (value, fallback) => {
+    const parsedValue = Number.parseInt(value, 10);
+
+    if (!Number.isFinite(parsedValue)) {
+      return fallback;
+    }
+
+    return Math.min(Math.max(parsedValue, 50), 400);
   };
 
   return {
@@ -108,6 +119,10 @@ function normalizeDisplayConfig(rawConfig = {}) {
       typeof rawConfig.showStatusWidget === "boolean"
         ? rawConfig.showStatusWidget
         : DEFAULT_DISPLAY_CONFIG.showStatusWidget,
+    statusWidgetScalePercent: normalizeStatusWidgetScalePercent(
+      rawConfig.statusWidgetScalePercent,
+      DEFAULT_DISPLAY_CONFIG.statusWidgetScalePercent,
+    ),
   };
 }
 

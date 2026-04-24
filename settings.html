@@ -89,14 +89,15 @@
                   Announcements Slide Delay
                 </label>
                 <div class="settings-duration-input">
-                  <input
-                    class="settings-input"
-                    id="slideshow-announcements-seconds"
-                    name="slideshowAnnouncementsSeconds"
-                    type="number"
-                    step="1"
-                    inputmode="numeric"
-                  />
+                    <input
+                      class="settings-input"
+                      id="slideshow-announcements-seconds"
+                      name="slideshowAnnouncementsSeconds"
+                      type="number"
+                      min="0"
+                      step="1"
+                      inputmode="numeric"
+                    />
                   <span class="settings-duration-unit">sec</span>
                 </div>
               </div>
@@ -109,14 +110,15 @@
                   Events Slide Delay
                 </label>
                 <div class="settings-duration-input">
-                  <input
-                    class="settings-input"
-                    id="slideshow-events-seconds"
-                    name="slideshowEventsSeconds"
-                    type="number"
-                    step="1"
-                    inputmode="numeric"
-                  />
+                    <input
+                      class="settings-input"
+                      id="slideshow-events-seconds"
+                      name="slideshowEventsSeconds"
+                      type="number"
+                      min="0"
+                      step="1"
+                      inputmode="numeric"
+                    />
                   <span class="settings-duration-unit">sec</span>
                 </div>
               </div>
@@ -138,14 +140,15 @@
                   Packages Duration
                 </label>
                 <div class="settings-duration-input">
-                  <input
-                    class="settings-input"
-                    id="rotation-packages-seconds"
-                    name="rotationPackagesSeconds"
-                    type="number"
-                    step="5"
-                    inputmode="numeric"
-                  />
+                    <input
+                      class="settings-input"
+                      id="rotation-packages-seconds"
+                      name="rotationPackagesSeconds"
+                      type="number"
+                      min="0"
+                      step="5"
+                      inputmode="numeric"
+                    />
                   <span class="settings-duration-unit">sec</span>
                 </div>
               </div>
@@ -158,14 +161,15 @@
                   Announcements Duration
                 </label>
                 <div class="settings-duration-input">
-                  <input
-                    class="settings-input"
-                    id="rotation-announcements-seconds"
-                    name="rotationAnnouncementsSeconds"
-                    type="number"
-                    step="5"
-                    inputmode="numeric"
-                  />
+                    <input
+                      class="settings-input"
+                      id="rotation-announcements-seconds"
+                      name="rotationAnnouncementsSeconds"
+                      type="number"
+                      min="0"
+                      step="5"
+                      inputmode="numeric"
+                    />
                   <span class="settings-duration-unit">sec</span>
                 </div>
               </div>
@@ -178,14 +182,15 @@
                   Events Duration
                 </label>
                 <div class="settings-duration-input">
-                  <input
-                    class="settings-input"
-                    id="rotation-events-seconds"
-                    name="rotationEventsSeconds"
-                    type="number"
-                    step="5"
-                    inputmode="numeric"
-                  />
+                    <input
+                      class="settings-input"
+                      id="rotation-events-seconds"
+                      name="rotationEventsSeconds"
+                      type="number"
+                      min="0"
+                      step="5"
+                      inputmode="numeric"
+                    />
                   <span class="settings-duration-unit">sec</span>
                 </div>
               </div>
@@ -213,6 +218,36 @@
                   <span class="settings-toggle-thumb"></span>
                 </span>
               </label>
+            </div>
+
+            <div class="settings-group settings-status-widget-size-group">
+              <label
+                class="settings-label settings-label-neutral"
+                for="status-widget-scale-percent"
+              >
+                Module Size
+              </label>
+              <div class="settings-range-row">
+                <input
+                  class="settings-range"
+                  id="status-widget-scale-percent"
+                  name="statusWidgetScalePercent"
+                  type="range"
+                  min="50"
+                  max="400"
+                  step="5"
+                />
+                <output
+                  class="settings-range-value"
+                  id="status-widget-scale-value"
+                  for="status-widget-scale-percent"
+                >
+                  100%
+                </output>
+              </div>
+              <p class="settings-help">
+                Adjust the size of the time and weather module.
+              </p>
             </div>
           </fieldset>
 
